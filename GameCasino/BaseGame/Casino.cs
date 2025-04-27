@@ -58,6 +58,7 @@ namespace GameCasino.BaseGame
             {
                 if (_profile.Balance <= 0)
                 {
+                    // “No money? Kicked!”
                     Console.WriteLine("Нет денег? Выходи!");
                     return;
                 }
@@ -117,6 +118,26 @@ namespace GameCasino.BaseGame
             }
         }
 
+        //private void SetupGameHandlers(CasinoGameBase game)
+        //{
+        //    game.OnWin += (s, e) =>
+        //    {
+        //        _profile.Balance += e.BetAmount;
+        //        Console.WriteLine($"{e.GameDetails} | Выигрыш: +{e.BetAmount}");
+        //    };
+
+        //    game.OnLose += (s, e) =>
+        //    {
+        //        _profile.Balance -= e.BetAmount;
+        //        Console.WriteLine($"{e.GameDetails} | Проигрыш: -{e.BetAmount}");
+        //    };
+
+        //    game.OnDraw += (s, e) =>
+        //    {
+        //        Console.WriteLine($"{e.GameDetails} | Ничья, ставка возвращена");
+        //    };
+        //}
+
         private void SetupGameHandlers(CasinoGameBase game)
         {
             game.OnWin += (s, e) =>
@@ -128,7 +149,8 @@ namespace GameCasino.BaseGame
             game.OnLose += (s, e) =>
             {
                 _profile.Balance -= e.BetAmount;
-                Console.WriteLine($"Ваш результат: {s}\nРезультат апонента: {e}\nПроигрыш! -{e.BetAmount}");
+                
+                Console.WriteLine($"Проигрыш! -{e.BetAmount}");
             };
 
             game.OnDraw += (s, e) =>
@@ -143,7 +165,8 @@ namespace GameCasino.BaseGame
             {
                 int oldBalance = _profile.Balance;
                 _profile.Balance = MaxBankValue / 2;
-                Console.WriteLine($"Ты потратил половину бара в казино! {oldBalance} → {_profile.Balance}");
+                // “You wasted half of your bank money in casino’s bar”
+                Console.WriteLine($"Вы потратили половину своих банковских денег в баре казино! {oldBalance} → {_profile.Balance}");
             }
             else
             {

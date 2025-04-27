@@ -37,4 +37,26 @@ namespace GameCasino.BaseGame
         protected virtual void OnLoseInvoke() => OnLose?.Invoke(this, new GameEventArgs(Bet));
         protected virtual void OnDrawInvoke() => OnDraw?.Invoke(this, new GameEventArgs(Bet));
     }
+
+//    protected virtual void OnWinInvoke(string details) =>
+//    OnWin?.Invoke(this, new GameEventArgs(Bet, details));
+
+//        protected virtual void OnLoseInvoke(string details) =>
+//            OnLose?.Invoke(this, new GameEventArgs(Bet, details));
+
+//        protected virtual void OnDrawInvoke(string details) =>
+//            OnDraw?.Invoke(this, new GameEventArgs(Bet, details));
+//    }
+
+//    public class GameEventArgs : EventArgs
+//{
+//    public int BetAmount { get; }
+//    public string GameDetails { get; }
+
+//    public GameEventArgs(int betAmount, string gameDetails)
+//    {
+//        BetAmount = betAmount;
+//        GameDetails = gameDetails;
+//    }
+//}
 }
