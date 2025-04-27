@@ -43,11 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseGame\BlackjackGame.cs" />
+    <Compile Include="BaseGame\Casino.cs" />
+    <Compile Include="BaseGame\CasinoGameBase.cs" />
+    <Compile Include="BaseGame\DiceGame.cs" />
+    <Compile Include="GameObject\CardFiles\Card.cs" />
+    <Compile Include="GameObject\DiceFiles\Dice.cs" />
+    <Compile Include="BaseGame\IGame.cs" />
+    <Compile Include="ProfileSystem\PlayerProfile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveLoad\FileSystemSaveLoadService.cs" />
+    <Compile Include="SaveLoad\ISaveLoadService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enum\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
