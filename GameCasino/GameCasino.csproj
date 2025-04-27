@@ -43,10 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseGame\BlackjackGame.cs" />
+    <Compile Include="BaseGame\Games\BlackjackGame.cs" />
     <Compile Include="BaseGame\Casino.cs" />
     <Compile Include="BaseGame\CasinoGameBase.cs" />
-    <Compile Include="BaseGame\DiceGame.cs" />
+    <Compile Include="BaseGame\Games\DiceGame.cs" />
+    <Compile Include="Enum\CardEnum.cs" />
+    <Compile Include="Enum\TranslatedEnumName\CardName.cs" />
     <Compile Include="GameObject\CardFiles\Card.cs" />
     <Compile Include="GameObject\DiceFiles\Dice.cs" />
     <Compile Include="BaseGame\IGame.cs" />
@@ -59,8 +61,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enum\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

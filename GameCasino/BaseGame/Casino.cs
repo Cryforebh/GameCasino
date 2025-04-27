@@ -1,4 +1,5 @@
-﻿using GameCasino.ProfileSystem;
+﻿using GameCasino.BaseGame.Games;
+using GameCasino.ProfileSystem;
 using GameCasino.SaveLoad;
 using System;
 using System.Collections.Generic;
@@ -112,50 +113,29 @@ namespace GameCasino.BaseGame
                 case 1:
                     return new BlackjackGame(52, bet);
                 case 2:
-                    return new DiceGame(2, 1, 6, bet);
+                    return new DiceGame(5, 1, 6, bet);
                 default:
                     throw new InvalidOperationException();
             }
         }
-
-        //private void SetupGameHandlers(CasinoGameBase game)
-        //{
-        //    game.OnWin += (s, e) =>
-        //    {
-        //        _profile.Balance += e.BetAmount;
-        //        Console.WriteLine($"{e.GameDetails} | Выигрыш: +{e.BetAmount}");
-        //    };
-
-        //    game.OnLose += (s, e) =>
-        //    {
-        //        _profile.Balance -= e.BetAmount;
-        //        Console.WriteLine($"{e.GameDetails} | Проигрыш: -{e.BetAmount}");
-        //    };
-
-        //    game.OnDraw += (s, e) =>
-        //    {
-        //        Console.WriteLine($"{e.GameDetails} | Ничья, ставка возвращена");
-        //    };
-        //}
 
         private void SetupGameHandlers(CasinoGameBase game)
         {
             game.OnWin += (s, e) =>
             {
                 _profile.Balance += e.BetAmount;
-                Console.WriteLine($"Победа! +{e.BetAmount}");
+                Console.WriteLine($"{e.GameDetails} | Выигрыш: +{e.BetAmount}");
             };
 
             game.OnLose += (s, e) =>
             {
                 _profile.Balance -= e.BetAmount;
-                
-                Console.WriteLine($"Проигрыш! -{e.BetAmount}");
+                Console.WriteLine($"{e.GameDetails} | Проигрыш: -{e.BetAmount}");
             };
 
             game.OnDraw += (s, e) =>
             {
-                Console.WriteLine("Ничья! Ставка возвращена");
+                Console.WriteLine($"{e.GameDetails} | Ничья, ставка возвращена");
             };
         }
 

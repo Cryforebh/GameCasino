@@ -12,27 +12,24 @@ namespace GameCasino.GameObject.DiceFiles
             : base($"Неверный диапазон кубиков. Разрешено: {min}-{max}") { }
     }
 
-    public struct Dice
+    public class Dice
     {
         private readonly int _min;
         private readonly int _max;
+        private Random _random = new Random();
 
-        public int Number
-        {
-            get
-            {
-                var rnd = new Random();
-                return rnd.Next(_min, _max + 1);
-            }
-        }
+        public int Value { get; private set; }
 
         public Dice(int min, int max)
         {
-            if (min < 1 || max > int.MaxValue || min >= max)
-                throw new WrongDiceNumberException(min, max);
-
             _min = min;
             _max = max;
+            Roll();
+        }
+
+        public void Roll()
+        {
+            Value = _random.Next(_min, _max + 1);
         }
     }
 }
