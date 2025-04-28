@@ -64,13 +64,40 @@ namespace GameCasino.BaseGame.Games
 
         public override void PlayGame()
         {
-            _playerHand = new List<Card> { _deck.Dequeue(), _deck.Dequeue() };
-            _dealerHand = new List<Card> { _deck.Dequeue(), _deck.Dequeue() };
+            int stopGivePlayer = 0;
+            int stopGiveDealer = 0;
+
+            _playerHand = new List<Card> { _deck.Dequeue(), _deck.Dequeue(), };
+            _dealerHand = new List<Card> { _deck.Dequeue(), _deck.Dequeue(), };
 
             int playerValue = GetHandValue(_playerHand);
             int dealerValue = GetHandValue(_dealerHand);
 
-            string details = $"Карты игрока: {string.Join(" ", _playerHand)} ({playerValue}) | Карты дилера: {_dealerHand[0]} ??";
+            string details = $"Ваши карты: {string.Join(" ", _playerHand)} ({playerValue})\nКарты дилера: {string.Join(" ", _dealerHand)} ({dealerValue})";
+
+            while (playerValue <= 19 && dealerValue <= 19)
+            {
+                Console.WriteLine(details);
+                Console.WriteLine("Нажмите F - Чтобы ВЗЯТЬ еще карту, или любую другую клавишу для ПРОПУСКА.");
+
+                if (Console.ReadKey().Key == ConsoleKey.F)
+                {
+                    _playerHand.Add(_deck.Dequeue());
+                    playerValue = GetHandValue(_playerHand);
+                }
+                else stopGivePlayer = 1;
+
+                if (dealerValue <= 17)
+                {
+                    _dealerHand.Add(_deck.Dequeue());
+                    dealerValue = GetHandValue(_dealerHand);
+                }
+                else stopGiveDealer = 1;
+
+                details = $"Ваши карты: {string.Join(" ", _playerHand)} ({playerValue})\nКарты дилера: {string.Join(" ", _dealerHand)} ({dealerValue})";
+
+                if (stopGivePlayer == 1 && stopGiveDealer == 1) break;
+            }
 
             if (playerValue > 21 || (dealerValue <= 21 && dealerValue > playerValue))
             {

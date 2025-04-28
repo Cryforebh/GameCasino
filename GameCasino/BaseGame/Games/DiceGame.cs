@@ -1,4 +1,5 @@
 ﻿using GameCasino.GameObject.DiceFiles;
+using GameCasino.ProfileSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,24 +35,33 @@ namespace GameCasino.BaseGame.Games
             }
         }
 
-        private int GetDiceSum()
+        private int RollDice()
         {
+            _dices.ForEach(d => d.Roll());
             return _dices.Sum(d => d.Value);
         }
 
         public override void PlayGame()
         {
-            _dices.ForEach(d => d.Roll());
-            int total = GetDiceSum();
-            string details = $"Результаты бросков: {string.Join(" + ", _dices.Select(d => d.Value))} = {total}";
+            int playerSum = RollDice();
+            string playerLog = $"Ваш результат: {string.Join(" + ", _dices.Select(d => d.Value))} = {playerSum}";
 
-            if (total > 7)
+            int computerSum = RollDice();
+            string computerLog = $"Дилер: {string.Join(" + ", _dices.Select(d => d.Value))} = {computerSum}";
+
+            string result = $"{playerLog}\n{computerLog}\nИтог: ";
+
+            if (playerSum > computerSum)
             {
-                OnWinInvoke(details);
+                OnWinInvoke(result + "Победа!");
+            }
+            else if (computerSum > playerSum)
+            {
+                OnLoseInvoke(result + "Поражение");
             }
             else
             {
-                OnLoseInvoke(details);
+                OnDrawInvoke(result + "Ничья");
             }
         }
     }

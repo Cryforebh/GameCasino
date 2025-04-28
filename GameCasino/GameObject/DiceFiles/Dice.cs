@@ -16,7 +16,7 @@ namespace GameCasino.GameObject.DiceFiles
     {
         private readonly int _min;
         private readonly int _max;
-        private Random _random = new Random();
+        private static Random _random = new Random();
 
         public int Value { get; private set; }
 

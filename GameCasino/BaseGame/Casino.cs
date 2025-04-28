@@ -14,7 +14,8 @@ namespace GameCasino.BaseGame
     {
         private readonly ISaveLoadService<string> _saveService;
         private PlayerProfile _profile;
-        private const int MaxBankValue = 1_000_000;
+        private int _choiceGame;
+        private const int MaxBankValue = 100000;
 
         public Casino(ISaveLoadService<string> saveService)
         {
@@ -42,7 +43,7 @@ namespace GameCasino.BaseGame
         private void CreateNewProfile()
         {
             _profile = new PlayerProfile();
-            Console.Write("Введите имя игрока: ");
+            Console.Write("Введите ваше имя: ");
             _profile.Name = Console.ReadLine();
             SaveProfile();
         }
@@ -92,6 +93,7 @@ namespace GameCasino.BaseGame
             {
                 Console.WriteLine($"Некорректный ввод. Введите число от {min} до {max}.");
             }
+            _choiceGame = choice;
             return choice;
         }
 
@@ -124,18 +126,18 @@ namespace GameCasino.BaseGame
             game.OnWin += (s, e) =>
             {
                 _profile.Balance += e.BetAmount;
-                Console.WriteLine($"{e.GameDetails} | Выигрыш: +{e.BetAmount}");
+                Console.WriteLine($"{e.GameDetails}\nВыигрыш: +{e.BetAmount}");
             };
 
             game.OnLose += (s, e) =>
             {
                 _profile.Balance -= e.BetAmount;
-                Console.WriteLine($"{e.GameDetails} | Проигрыш: -{e.BetAmount}");
+                Console.WriteLine($"{e.GameDetails}\nПроигрыш: -{e.BetAmount}");
             };
 
             game.OnDraw += (s, e) =>
             {
-                Console.WriteLine($"{e.GameDetails} | Ничья, ставка возвращена");
+                Console.WriteLine($"{e.GameDetails}\nНичья, ставка возвращена");
             };
         }
 

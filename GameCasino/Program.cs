@@ -26,7 +26,8 @@ namespace GameCasino
                     Console.Clear();
                     casino.StartGame();
 
-                    Console.WriteLine("\nНажмите Q для выхода или любую клавишу для продолжения");
+                    Console.WriteLine("\nНажмите Q - для выхода из игры.\nИли любую клавишу для продолжения.");
+                    
                     if (Console.ReadKey().Key == ConsoleKey.Q) break;
                 }
 

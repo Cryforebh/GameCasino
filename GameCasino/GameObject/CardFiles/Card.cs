@@ -18,6 +18,6 @@ namespace GameCasino.GameObject.CardFiles
             Suit = suit;
             Rank = rank;
         }
-        public override string ToString() => $"{CardName.GetNameRank(Rank)} {CardName.GetNameSuit(Suit)}";
+        public override string ToString() => $"{CardName.GetNameRank(Rank)}-{CardName.GetNameSuit(Suit)};";
     }
 }
