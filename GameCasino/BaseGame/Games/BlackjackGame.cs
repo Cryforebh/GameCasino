@@ -45,72 +45,97 @@ namespace GameCasino.BaseGame.Games
             _deck = new Queue<Card>(cards.OrderBy(c => Guid.NewGuid()));
         }
 
+        // Метод рассчитывает значение карт в руке игрока с учетом особой роли тузов.
         private int GetHandValue(List<Card> hand)
         {
-            int value = 0;
-            int aces = 0;
+            int value = 0;                  // Общая сумма очков 
+            int aces = 0;                   // Счётчик тузов
             foreach (var card in hand)
             {
                 if (card.Rank == CardRank.Ace) aces++;
-                value += (int)card.Rank > 10 ? 10 : (int)card.Rank;
+                value += (int)card.Rank > 10 
+                    ? 10                    // Для карт Валет, Дама, Король (значения 11-13)
+                    : (int)card.Rank;       // Для карт 2-10
             }
             while (value > 21 && aces > 0)
             {
-                value -= 10;
-                aces--;
+                value -= 10;                // Изменение значение туза с 11 на 1
+                aces--;                     // Уменьшаем счетчик неучтенных тузов
             }
             return value;
         }
 
         public override void PlayGame()
         {
-            int stopGivePlayer = 0;
-            int stopGiveDealer = 0;
-
             _playerHand = new List<Card> { _deck.Dequeue(), _deck.Dequeue(), };
             _dealerHand = new List<Card> { _deck.Dequeue(), _deck.Dequeue(), };
 
-            int playerValue = GetHandValue(_playerHand);
-            int dealerValue = GetHandValue(_dealerHand);
+            bool playerTurn = true;
+            bool dealerTurn = true;
 
-            string details = $"Ваши карты: {string.Join(" ", _playerHand)} ({playerValue})\nКарты дилера: {string.Join(" ", _dealerHand)} ({dealerValue})";
-
-            while (playerValue <= 19 && dealerValue <= 19)
+            while (playerTurn || dealerTurn)
             {
-                Console.WriteLine(details);
-                Console.WriteLine("Нажмите F - Чтобы ВЗЯТЬ еще карту, или любую другую клавишу для ПРОПУСКА.");
-
-                if (Console.ReadKey().Key == ConsoleKey.F)
+                // Ход игрока
+                if (playerTurn)
                 {
-                    _playerHand.Add(_deck.Dequeue());
-                    playerValue = GetHandValue(_playerHand);
-                }
-                else stopGivePlayer = 1;
+                    Console.WriteLine(GetGameStatus());
+                    Console.WriteLine("F - Взять карту | Любая клавиша - Пас");
 
-                if (dealerValue <= 17)
+                    if (Console.ReadKey(true).Key == ConsoleKey.F)
+                    {
+                        _playerHand.Add(_deck.Dequeue());
+                    }
+                    else
+                    {
+                        playerTurn = false;
+                    }
+                }
+
+                // Проверка переборов
+                if (GetHandValue(_playerHand) >= 21) break;
+
+                // Ход дилера
+                if (dealerTurn && GetHandValue(_dealerHand) <= 17)
                 {
                     _dealerHand.Add(_deck.Dequeue());
-                    dealerValue = GetHandValue(_dealerHand);
                 }
-                else stopGiveDealer = 1;
+                else
+                {
+                    dealerTurn = false;
+                }
 
-                details = $"Ваши карты: {string.Join(" ", _playerHand)} ({playerValue})\nКарты дилера: {string.Join(" ", _dealerHand)} ({dealerValue})";
-
-                if (stopGivePlayer == 1 && stopGiveDealer == 1) break;
+                // Проверка переборов
+                if (GetHandValue(_dealerHand) >= 21) break;
             }
+
+            // Финализация игры
+            int playerValue = GetHandValue(_playerHand);
+            int dealerValue = GetHandValue(_dealerHand);
+            string result = GetGameStatus() + "\nИтог: ";
 
             if (playerValue > 21 || (dealerValue <= 21 && dealerValue > playerValue))
             {
-                OnLoseInvoke(details);
+                OnLoseInvoke(result + "Поражение");
             }
             else if (playerValue == dealerValue)
             {
-                OnDrawInvoke(details);
+                OnDrawInvoke(result + "Ничья");
             }
             else
             {
-                OnWinInvoke(details);
+                OnWinInvoke(result + "Победа!");
             }
+        }
+
+        private string GetGameStatus()
+        {
+            return $"Ваши карты: {FormatHand(_playerHand)} ({GetHandValue(_playerHand)})\n" +
+                   $"Карты дилера: {FormatHand(_dealerHand)} ({GetHandValue(_dealerHand)})";
+        }
+
+        private static string FormatHand(IEnumerable<Card> hand)
+        {
+            return string.Join(" ", hand.Select(c => c.ToString()));
         }
     }
 }
